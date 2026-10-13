@@ -1,4 +1,4 @@
-"""ALEK REAL Runpod worker scaffold: intentionally refuses unimplemented inference."""
+"""ALEK REAL: Runpod Serverless entrypoint. Safe validation-only until GPU adapter is tested."""
 import runpod
 
 MAX_PROMPT_CHARS = 3000
@@ -17,8 +17,8 @@ def handler(job):
         return {"error": "INVALID_PROMPT"}
     if type(duration) is not int or duration not in ALLOWED_DURATIONS or ratio not in ALLOWED_RATIOS:
         return {"error": "UNSUPPORTED_VIDEO_SETTINGS"}
-    return {"error": "MODEL_ADAPTER_NOT_READY", "message": "No GPU inference adapter is deployed; no video was generated."}
+    return {"error": "MODEL_ADAPTER_NOT_READY", "message": "GPU inference is not yet enabled; no video was generated."}
 
 
-if __name__ == "__main__":
-    runpod.serverless.start({"handler": handler})
+# Keep the explicit call visible to Runpod's static repository scanner.
+runpod.serverless.start({"handler": handler})
