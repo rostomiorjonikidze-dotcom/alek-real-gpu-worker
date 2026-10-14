@@ -14,8 +14,10 @@ jobs:
       - name: Check syntax
         run: python -m compileall -q handler.py worker.py tests
       - name: Install test dependencies
-        run: python -m pip install pytest
+        run: python -m pip install pytest 'runpod>=1.7,<2'
       - name: Run unit tests
+        env:
+          ALEK_ENABLE_GPU_INFERENCE: 'false'
         run: python -m pytest -q tests
       - name: Verify Runpod entrypoint
         run: |
