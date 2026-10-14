@@ -31,3 +31,11 @@ jobs:
           assert 'handler.py' in Path('Dockerfile').read_text()
           print('Runpod handler entrypoint present')
           PY
+
+  docker-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Runpod container without starting GPU
+        run: docker build --progress=plain --tag alek-real-gpu-worker:ci .
