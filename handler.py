@@ -1,4 +1,4 @@
-"""ALEK REAL Runpod Serverless entrypoint. GPU inference is opt-in and unverified."""
+"""ALEK REAL Runpod Serverless entrypoint; GPU rendering remains opt-in."""
 import runpod
 from worker import process_job
 
@@ -7,5 +7,5 @@ def handler(job):
     return process_job(job)
 
 
-# Keep at module level so Runpod repository detection finds the entrypoint.
-runpod.serverless.start({"handler": handler})
+if __name__ == "__main__":
+    runpod.serverless.start({"handler": handler})
