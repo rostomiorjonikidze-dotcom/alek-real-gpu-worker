@@ -70,7 +70,9 @@ def model_location():
         for path in sorted(snapshots.iterdir(), reverse=True):
             if path.is_dir() and (path / "model_index.json").is_file():
                 return str(path)
-    return MODEL_ID
+    if os.environ.get("ALEK_ALLOW_MODEL_DOWNLOAD", "false").lower() == "true":
+        return MODEL_ID
+    raise RuntimeError("MODEL_CACHE_REQUIRED")
 
 
 def get_pipeline():
