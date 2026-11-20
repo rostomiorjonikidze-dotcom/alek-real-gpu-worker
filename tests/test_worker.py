@@ -38,8 +38,13 @@ class WorkerTests(unittest.TestCase):
 
     def test_model_id_and_cache_fallback(self):
         self.assertEqual(MODEL_ID, "Wan-AI/Wan2.2-TI2V-5B-Diffusers")
-        with patch("worker.Path.is_dir", return_value=False):
-            self.assertEqual(model_location(), MODEL_ID)
+        with patch.dict(os.environ, {"ALEK_ALLOW_MODEL_DOWNLOAD": "false"}):
+            with patch("worker.Path.is_dir", return_value=False):
+                with self.assertRaisesRegex(RuntimeError, "MODEL_CACHE_REQUIRED"):
+                    model_location()
+        with patch.dict(os.environ, {"ALEK_ALLOW_MODEL_DOWNLOAD": "true"}):
+            with patch("worker.Path.is_dir", return_value=False):
+                self.assertEqual(model_location(), MODEL_ID)
 
     def test_disabled_never_renders(self):
         payload = {"input": {"prompt": "A film scene", "upload_url": URL}}
